@@ -1,0 +1,35 @@
+<div class="container-xl">
+  <% if @access_token.present? && @organisation_provider_id.present? %>
+    
+  <% else %>
+    <div class="row">
+      <div class="col-12">
+        <h1>Welcome!</h1>
+        <h5>First, please give us access to your Partner admin:</h5>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 col-md-6">
+        <%= form_with(url: user_path(@user), method: "put") do %>
+          <div class="mb-3">
+            <label for="organisationId" class="form-label">Organisation ID</label>
+            <input type="text" class="form-control" id="organisationId" 
+              name=user[organisation_provider_id] aria-describedby="emailHelp"
+              value="<%= @organisation_provider_id %>"
+            >
+            <div id="orgIdHelp" class="form-text">Found in your Shopify Partner dashboard URL:</div>
+            <%= image_tag("url_org_id.png", width: '400') %>
+          </div>
+          <div class="mb-3">
+            <label for="token" class="form-label">Access Token</label>
+            <input type="text" class="form-control" id="token" name=user[access_token]
+              value="<%= @access_token %>"
+            >
+            <div id="tokenHelp" class="form-text">Create it in Settings >> Partner API Clients >> Create API Client</div>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
