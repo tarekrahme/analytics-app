@@ -1,6 +1,22 @@
 <div class="container-xl">
+  <%= link_to 'trigger', trigger_user_path(@user) %>
+
   <% if @access_token.present? && @organisation_provider_id.present? %>
-    
+    <br>
+    <br>
+    Apps: <%= @apps.pluck(:name).to_s %>
+    <br>
+    <br>
+    Plans: <%= @plans.pluck(:id, :amount, :name).to_s %>
+    <br>
+    <br>
+    Shops: <%= @shops.pluck(:name).to_s %>
+    <br>
+    <br>
+    Transactions: <%= @transactions.pluck(:gross_amount).to_s %>
+    <br>
+    <br>
+    Events: <%= @events.pluck(:event_type, :gross_amount).to_s %>
   <% else %>
     <div class="row">
       <div class="col-12">

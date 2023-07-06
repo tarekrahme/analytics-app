@@ -48,6 +48,10 @@ gem "sidekiq", "~> 7.1"
 
 gem 'graphql'
 
+gem "httparty"
+
+gem "json"
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
@@ -63,6 +67,7 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 
+  gem 'annotate'
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
 
@@ -76,4 +81,3 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
-gem "graphiql-rails", group: :development
