@@ -10,4 +10,7 @@ Rails.application.routes.draw do
       get :trigger
     end
   end
+
+  resources :shops, only: [:index]
+  get '/shops/cohort', to: 'shops#cohort'
 end

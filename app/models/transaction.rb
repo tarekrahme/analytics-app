@@ -18,4 +18,14 @@
 class Transaction < ApplicationRecord
   belongs_to :shopify_app
   belongs_to :shop
+
+  scope :payments, -> { where.not(transaction_type: "APP_SALE_ADJUSTMENT") }
+
+  after_save :calculate_shop_earnings_and_payments
+
+  def calculate_shop_earnings_and_payments
+    shop.update(total_earnings: shop.calculate_total_earnings,
+                total_number_of_payments: shop.calculate_total_number_of_payments,
+                average_payment: shop.calculate_average_payment)
+  end
 end

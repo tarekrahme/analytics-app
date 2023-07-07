@@ -1,0 +1,17 @@
+<div class="container-xl">
+  <div class="mt-2 mb-3">
+    <%= link_to shops_cohort_path do %>
+      <button type="button" class="btn btn-outline-primary">
+        Cohort Analysis
+      </button>
+    <% end %>
+  </div>
+
+  <% if @cohort_month %>
+    <div class="alert alert-primary" role="alert">
+      Cohort: <%= @cohort_month %>
+    </div>
+  <% end %>
+
+  <%= render "shops_table" %>
+</div>

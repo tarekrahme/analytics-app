@@ -29,7 +29,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable, :trackable
 
   has_many :shopify_apps, dependent: :destroy
-  has_many :shops
+  has_many :shops, -> { order('shops.name ASC') }
   has_many :transactions, through: :shopify_apps
   has_many :plans, through: :shopify_apps
   has_many :events, through: :shopify_apps

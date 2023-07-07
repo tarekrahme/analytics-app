@@ -145,6 +145,7 @@ GEM
     nokogiri (1.15.2-x86_64-darwin)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    pagy (6.0.4)
     pg (1.5.3)
     public_suffix (5.0.1)
     puma (5.6.6)
@@ -252,6 +253,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   json
+  pagy
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.6)

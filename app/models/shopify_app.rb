@@ -34,6 +34,8 @@ class ShopifyApp < ApplicationRecord
                 type
                 shop {
                   id
+                  name
+                  myshopifyDomain
                 }
                 occurredAt
                 ... on SubscriptionChargeCanceled {
@@ -100,12 +102,22 @@ class ShopifyApp < ApplicationRecord
         test = event["charge"]["test"]
         next if test
 
+        shop_provider_id = event["shop"]["id"]
+        shop_name = event["shop"]["name"]
+        shop_shopify_domain = event["shop"]["myshopifyDomain"]
         event_type = event["type"]
         event_shop_id = event["shop"]["id"]
         event_occurred_at = event["occurredAt"]
         plan_name = event["charge"]["name"]
         event_billing_on = event["charge"]["billingOn"]
         gross_amount = event["charge"]["amount"]["amount"]
+
+        shop = Shop.find_or_create_by(user_id: user_id, provider_id: shop_provider_id) do |shop|
+          shop.shopify_app_id = id
+          shop.shopify_domain = shop_shopify_domain
+          shop.provider_id = shop_provider_id
+          shop.name = shop_name
+        end
 
         begin
           plan = Plan.find_or_create_by(shopify_app_id: id, amount: gross_amount) do |plan|
@@ -115,7 +127,6 @@ class ShopifyApp < ApplicationRecord
           retry
         end
 
-        shop = Shop.find_by(provider_id: event_shop_id)
         next unless shop
 
         begin
@@ -132,5 +143,7 @@ class ShopifyApp < ApplicationRecord
         sleep 0.3
       end
     end
+
+    PopulateActivatedOnColumnJob.perform_later(app_id: id)
   end
 end

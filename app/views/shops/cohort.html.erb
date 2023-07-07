@@ -1,0 +1,40 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>
+        (in months)
+      </th>
+
+      <% (@data.size+1).times do |i| %>
+        <th>
+          <%= i %>
+        </th>
+      <% end %>
+
+    </tr>
+  </thead>
+
+  <% @data.each do |month, values| %>
+
+    <% start = values[0] %>
+
+    <tr>
+      <td>
+        <%= month.strftime('%b %Y') %> <br/>
+
+        <%= link_to shops_path(month: month) do %>
+          <%= start %> users
+        <% end %>
+      </td>
+
+      <% (values.size).times do |i| %>
+        <td>
+            <%= "#{((values[i].to_f/start.to_f) * 100.00).round(0)}%" %>
+        </td>
+      <% end %>
+    </tr>
+
+  <% end %>
+
+
+</table>

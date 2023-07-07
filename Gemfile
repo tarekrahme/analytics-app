@@ -52,6 +52,10 @@ gem "httparty"
 
 gem "json"
 
+# gem 'cohort_me'
+
+gem 'pagy'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
