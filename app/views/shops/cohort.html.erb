@@ -23,13 +23,15 @@
         <%= month.strftime('%b %Y') %> <br/>
 
         <%= link_to shops_path(month: month) do %>
-          <%= start %> users
+          <%= start %> customers
         <% end %>
       </td>
 
       <% (values.size).times do |i| %>
-        <td>
-            <%= "#{((values[i].to_f/start.to_f) * 100.00).round(0)}%" %>
+        <% percentage = (values[i].to_f/start.to_f) %>
+        <% displayed_percentage = (percentage * 100.00).round(0) %>
+        <td <%= "style=background-color:rgba(38,194,129,#{percentage.round(2)})" %>>
+            <%= "#{displayed_percentage}%" %>
         </td>
       <% end %>
     </tr>

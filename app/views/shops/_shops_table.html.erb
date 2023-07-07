@@ -3,24 +3,24 @@
     <tr>
       <th scope="col">Shop</th>
       <% if @subscribed_in_asc %>
-        <th><%= link_to "Subscribed In", shops_path(sort_subscribed_in: 'desc'), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Subscribed In", shops_path(sort_subscribed_in: 'desc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
       <% else %>
-        <th><%= link_to "Subscribed In", shops_path(sort_subscribed_in: 'asc'), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Subscribed In", shops_path(sort_subscribed_in: 'asc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
       <% end %>
       <% if @earnings_asc %>
-        <th><%= link_to "Net Earnings", shops_path(sort_earnings: 'desc'), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Net Earnings", shops_path(sort_earnings: 'desc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
       <% else %>
-        <th><%= link_to "Net Earnings", shops_path(sort_earnings: 'asc'), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Net Earnings", shops_path(sort_earnings: 'asc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
       <% end %>
       <% if @payments_asc %>
-        <th><%= link_to "Payments", shops_path(sort_payments: 'desc'), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Payments", shops_path(sort_payments: 'desc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
       <% else %>
-        <th><%= link_to "Payments", shops_path(sort_payments: 'asc'), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Payments", shops_path(sort_payments: 'asc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
       <% end %>
       <% if @avg_payments_asc %>
-        <th><%= link_to "Avg Payment", shops_path(sort_avg_payments: 'desc'), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Avg Payment", shops_path(sort_avg_payments: 'desc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
       <% else %>
-        <th><%= link_to "Avg Payment", shops_path(sort_avg_payments: 'asc'), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Avg Payment", shops_path(sort_avg_payments: 'asc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
       <% end %>
     </tr>
   </thead>

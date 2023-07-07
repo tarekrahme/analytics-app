@@ -4,6 +4,7 @@ class ShopsController < ApplicationController
 
     if params[:month]
       @shops = @shops.where("DATE_TRUNC('month', activated_on) = ?", params[:month])
+      @month_param = params[:month]
       @cohort_month = Date.parse(params[:month]).strftime("%B %Y")
     end
 
