@@ -15,4 +15,19 @@
 class Event < ApplicationRecord
   belongs_to :shopify_app
   belongs_to :shop
+
+  scope :activated, -> { where(event_type: 'SUBSCRIPTION_CHARGE_ACTIVATED') }
+  scope :cancelled, -> { where(event_type: 'SUBSCRIPTION_CHARGE_CANCELED') }
+
+  def activated?
+    event_type == 'SUBSCRIPTION_CHARGE_ACTIVATED'
+  end
+
+  def cancelled?
+    event_type == 'SUBSCRIPTION_CHARGE_CANCELED'
+  end
+
+  def frozen?
+    event_type == 'SUBSCRIPTION_CHARGE_FROZEN'
+  end
 end

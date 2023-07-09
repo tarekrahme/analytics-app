@@ -1,0 +1,102 @@
+
+<div class="container-lg mt-2" >
+
+  <div class="row m-auto">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="">
+        <h1>Earnings</h1>
+      </div>
+
+      <div>
+        <form action="/transactions">
+          <select name="days" class="form-select" onchange="this.form.submit()">
+            <option value="this_month" <%= "selected" if params[:days] == "this_month" %> >This month</option>
+            <option value="30" <%= "selected" if params[:days] == "30" || params[:days].nil? %> >Last 30 days</option>
+            <option value="90" <%= "selected" if params[:days] == "90" %> >Last 3 months</option>
+            <option value="180" <%= "selected" if params[:days] == "180" %> >Last 6 months</option>
+            <option value="365" <%= "selected" if params[:days] == "365" %> >Last 12 months</option>
+          </select>
+        </form>      
+      </div>
+    </div>
+
+    <div class="card mt-2 shadow-lg" style="border-radius: 12px">
+      <div class="card-body">
+        
+        <div class="d-flex justify-content-between mb-4 align-items-center">
+          <div>
+            <h1>$<%= number_with_delimiter @total_earnings %> </h1>
+            <h6 style="color: grey"> Total Earnings </h6>
+          </div>
+          <div>
+            <% if @change > 0 %>
+              <h3 style="color: green"> +<%= @change %>% </h3>
+            <% else %>
+              <h3 style="color: red"> <%= @change %>% </h3>
+            <% end %>
+            <p style="color: grey; font-size: 12px"> vs. previous period </p>
+          </div>
+        </div>
+
+        <%= area_chart transactions_main_chart_path(days: @days), points: false, prefix: "$", thousands: "," %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-sm-6 col-md-4 mb-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3><%= @number_of_customers %></h3>
+          <h6 style="color: grey">Customers</h6>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4 mb-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3>$<%= @average_revenue_per_customer %></h3>
+          <h6 style="color: grey">Avg rev per transaction</h6>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4 mb-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3>$<%= number_with_delimiter(@average_revenue_per_day) %> </h3>
+          <h6 style="color: grey">Avg rev per day</h6>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4 mb-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3><%= link_to @churned_shops_count, shops_path(shop_ids: @churned_shops_ids, churn_timeframe: @days), style: "color: firebrick" %></h3>
+          <h6 style="color: grey">Churned Customers</h6>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4 mb-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3 style="color: firebrick"><%= @user_churn %>%</h3>
+          <h6 style="color: grey">User Churn</h6>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4 mb-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3 style="color: firebrick">$<%= @revenue_churn %></h3>
+          <h6 style="color: grey">MRR Churn</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

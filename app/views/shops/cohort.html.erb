@@ -27,8 +27,8 @@
         <% end %>
       </td>
 
-      <% (values.size).times do |i| %>
-        <% percentage = (values[i].to_f/start.to_f) %>
+      <% (values.size-1).times do |i| %>
+        <% percentage = (values[i+1].to_f/start.to_f) %>
         <% displayed_percentage = (percentage * 100.00).round(0) %>
         <td <%= "style=background-color:rgba(38,194,129,#{percentage.round(2)})" %>>
             <%= "#{displayed_percentage}%" %>

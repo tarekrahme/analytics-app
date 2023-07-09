@@ -46,6 +46,8 @@ gem "devise", "~> 4.9"
 
 gem "sidekiq", "~> 7.1"
 
+gem "sidekiq-cron"
+
 gem 'graphql'
 
 gem "httparty"
@@ -55,6 +57,11 @@ gem "json"
 # gem 'cohort_me'
 
 gem 'pagy'
+
+gem "chartkick"
+
+gem "groupdate"
+
 
 # Use Sass to process CSS
 # gem "sassc-rails"

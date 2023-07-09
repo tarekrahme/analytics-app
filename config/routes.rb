@@ -13,4 +13,10 @@ Rails.application.routes.draw do
 
   resources :shops, only: [:index]
   get '/shops/cohort', to: 'shops#cohort'
+  get '/shops/main_chart', to: 'shops#main_chart'
+
+  resources :transactions, only: [:index]
+  get '/transactions/main_chart', to: 'transactions#main_chart'
+
+  get 'timeline', to: 'timeline#index'
 end

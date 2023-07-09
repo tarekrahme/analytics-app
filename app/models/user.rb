@@ -34,14 +34,14 @@ class User < ApplicationRecord
   has_many :plans, through: :shopify_apps
   has_many :events, through: :shopify_apps
 
-  def retreive_data
+  def retreive_data(since: nil)
     require "httparty"
     require "json"
 
     # Set the GraphQL query
     query = <<-GRAPHQL
-      query($cursor: String) {
-        transactions(after: $cursor, first: 80, types: [APP_SUBSCRIPTION_SALE], createdAtMin: "2021-01-01T00:00:00Z") {
+      query($cursor: String, $since: DateTime) {
+        transactions(after: $cursor, first: 80, types: [APP_SUBSCRIPTION_SALE], createdAtMin: $since) {
           edges {
             cursor
             node {
@@ -89,9 +89,10 @@ class User < ApplicationRecord
 
     cursor = nil
     has_next_page = true
+    since = since.present? ? since : "2016-01-01T00:00:00Z"
 
     while has_next_page do
-      body = { query: query, variables: { cursor: cursor } }
+      body = { query: query, variables: { cursor: cursor, since: since } }
 
       # Make the POST request
       response = HTTParty.post(endpoint, headers: headers, body: body.to_json)
@@ -149,8 +150,8 @@ class User < ApplicationRecord
 
     # Set the GraphQL query
     query = <<-GRAPHQL
-      query($cursor: String) {
-        transactions(after: $cursor, first: 80, types: [APP_SALE_ADJUSTMENT], createdAtMin: "2021-01-01T00:00:00Z") {
+      query($cursor: String, $since: DateTime) {
+        transactions(after: $cursor, first: 80, types: [APP_SALE_ADJUSTMENT], createdAtMin: $since) {
           edges {
             cursor
             node {
@@ -190,7 +191,7 @@ class User < ApplicationRecord
     has_next_page = true
 
     while has_next_page do
-      body = { query: query, variables: { cursor: cursor } }
+      body = { query: query, variables: { cursor: cursor, since: since } }
 
       # Make the POST request
       response = HTTParty.post(endpoint, headers: headers, body: body.to_json)
@@ -246,8 +247,8 @@ class User < ApplicationRecord
 
     # Set the GraphQL query
     query = <<-GRAPHQL
-      query($cursor: String) {
-        transactions(after: $cursor, first: 80, types: [APP_ONE_TIME_SALE], createdAtMin: "2021-01-01T00:00:00Z") {
+      query($cursor: String, $since: DateTime) {
+        transactions(after: $cursor, first: 80, types: [APP_ONE_TIME_SALE], createdAtMin: $since) {
           edges {
             cursor
             node {
@@ -287,7 +288,7 @@ class User < ApplicationRecord
     has_next_page = true
 
     while has_next_page do
-      body = { query: query, variables: { cursor: cursor } }
+      body = { query: query, variables: { cursor: cursor, since: since } }
 
       # Make the POST request
       response = HTTParty.post(endpoint, headers: headers, body: body.to_json)
@@ -343,8 +344,8 @@ class User < ApplicationRecord
     
     # Set the GraphQL query
     query = <<-GRAPHQL
-      query($cursor: String) {
-        transactions(after: $cursor, first: 80, types: [APP_USAGE_SALE], createdAtMin: "2021-01-01T00:00:00Z") {
+      query($cursor: String, $since: DateTime) {
+        transactions(after: $cursor, first: 80, types: [APP_USAGE_SALE], createdAtMin: $since) {
           edges {
             cursor
             node {
@@ -384,7 +385,7 @@ class User < ApplicationRecord
     has_next_page = true
 
     while has_next_page do
-      body = { query: query, variables: { cursor: cursor } }
+      body = { query: query, variables: { cursor: cursor, since: since } }
 
       # Make the POST request
       response = HTTParty.post(endpoint, headers: headers, body: body.to_json)
@@ -439,7 +440,7 @@ class User < ApplicationRecord
     end
 
     shopify_apps.each do |app|
-      RetreiveEventsAndPlansJob.perform_later(app_id: app.id)
+      RetreiveEventsAndPlansJob.perform_later(app_id: app.id, since: since)
     end
   end
 end

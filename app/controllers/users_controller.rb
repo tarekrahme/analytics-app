@@ -4,17 +4,14 @@ class UsersController < ApplicationController
     user.update(user_params)
 
     RetreiveDataJob.perform_later(user_id: user.id)
-    flash[:notice] = "Great! Retreiving your data now, please give it a few seconds."
+    flash[:notice] = "Great! Retreiving your data now, please give it a few minutes."
     redirect_to root_path
   end
 
   def trigger
-    puts '---------------'
-    puts params
-    
     user = User.find(params[:id])
     RetreiveDataJob.perform_later(user_id: user.id)
-    flash[:notice] = "Great! Retreiving your data now, please give it a few seconds."
+    flash[:notice] = "Great! Retreiving your data now, please give it a few minutes."
     redirect_to root_path
   end
 

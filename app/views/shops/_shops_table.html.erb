@@ -1,33 +1,49 @@
-<table class="table">
+<table class="table table-hover">
   <thead>
     <tr>
       <th scope="col">Shop</th>
-      <% if @subscribed_in_asc %>
-        <th><%= link_to "Subscribed In", shops_path(sort_subscribed_in: 'desc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
+      <% if @status_active %>
+        <th><%= link_to "Status", shops_path(filter_status: 'churned', month: @month_param), style: 'text-decoration: none; color: black' %> 
+        </th>
       <% else %>
-        <th><%= link_to "Subscribed In", shops_path(sort_subscribed_in: 'asc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Status", shops_path(filter_status: 'active', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
+      <% end %>
+      <% if @subscribed_in_asc %>
+        <th><%= link_to "Subscribed In", shops_path(sort_subscribed_in: 'desc', month: @month_param, filter_status: @filter_status), style: 'text-decoration: none; color: black' %> </th>
+      <% else %>
+        <th><%= link_to "Subscribed In", shops_path(sort_subscribed_in: 'asc', month: @month_param, filter_status: @filter_status), style: 'text-decoration: none; color: black' %> </th>
       <% end %>
       <% if @earnings_asc %>
-        <th><%= link_to "Net Earnings", shops_path(sort_earnings: 'desc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Net Earnings", shops_path(sort_earnings: 'desc', month: @month_param, filter_status: @filter_status), style: 'text-decoration: none; color: black' %> </th>
       <% else %>
-        <th><%= link_to "Net Earnings", shops_path(sort_earnings: 'asc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Net Earnings", shops_path(sort_earnings: 'asc', month: @month_param, filter_status: @filter_status), style: 'text-decoration: none; color: black' %> </th>
       <% end %>
       <% if @payments_asc %>
-        <th><%= link_to "Payments", shops_path(sort_payments: 'desc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Payments", shops_path(sort_payments: 'desc', month: @month_param, filter_status: @filter_status), style: 'text-decoration: none; color: black' %> </th>
       <% else %>
-        <th><%= link_to "Payments", shops_path(sort_payments: 'asc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Payments", shops_path(sort_payments: 'asc', month: @month_param, filter_status: @filter_status), style: 'text-decoration: none; color: black' %> </th>
       <% end %>
       <% if @avg_payments_asc %>
-        <th><%= link_to "Avg Payment", shops_path(sort_avg_payments: 'desc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Avg Payment", shops_path(sort_avg_payments: 'desc', month: @month_param, filter_status: @filter_status), style: 'text-decoration: none; color: black' %> </th>
       <% else %>
-        <th><%= link_to "Avg Payment", shops_path(sort_avg_payments: 'asc', month: @month_param), style: 'text-decoration: none; color: black' %> </th>
+        <th><%= link_to "Avg Payment", shops_path(sort_avg_payments: 'asc', month: @month_param, filter_status: @filter_status), style: 'text-decoration: none; color: black' %> </th>
       <% end %>
     </tr>
   </thead>
   <tbody>
     <% @shops.each do |shop| %>
       <tr>
-        <td><%= shop.display_name %></td>
+        <td><%= shop.display_name %>
+        </td>
+        <td>
+          <% if shop.churned_on? %>
+            <span class="badge bg-danger">Churned
+            </span>
+            <span style="font-size: 10px; color: orange"><%= shop.churned_on.strftime('%B %Y') %></span>
+          <% else %>
+            <span class="badge bg-success">Active</span>
+          <% end %>
+        </td>
         <td><%= shop.activated_on.strftime('%B %Y') %></td>
         <td>
         <span class="badge bg-success">$</span>

@@ -19,15 +19,15 @@ class ShopifyApp < ApplicationRecord
 
   delegate :access_token, :organisation_provider_id, to: :user
 
-  def retreive_events_and_plans
+  def retreive_events_and_plans(since: nil)
     require "httparty"
     require "json"
 
     # Set the GraphQL query
     query = <<-GRAPHQL
-      query($app_id: ID!, $cursor: String){
+      query($app_id: ID!, $cursor: String, $since: DateTime){
         app(id: $app_id) {
-          events(after: $cursor, first: 50, types:[SUBSCRIPTION_CHARGE_ACTIVATED, SUBSCRIPTION_CHARGE_CANCELED], occurredAtMin: "2021-01-01T00:00:00Z") {
+          events(after: $cursor, first: 50, types:[SUBSCRIPTION_CHARGE_ACTIVATED, SUBSCRIPTION_CHARGE_CANCELED, SUBSCRIPTION_CHARGE_FROZEN, SUBSCRIPTION_CHARGE_UNFROZEN], occurredAtMin: $since) {
             edges {
               cursor
               node {
@@ -62,6 +62,30 @@ class ShopifyApp < ApplicationRecord
                     }
                   }
                 }
+                ... on SubscriptionChargeFrozen {
+                  charge {
+                    id
+                    name
+                    billingOn
+                    test
+                    amount {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+                ... on SubscriptionChargeUnfrozen {
+                  charge {
+                    id
+                    name
+                    billingOn
+                    test
+                    amount {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
               }
             }
             pageInfo {
@@ -83,9 +107,10 @@ class ShopifyApp < ApplicationRecord
 
     cursor = nil
     has_next_page = true
+    since = since.present? ? since : "2016-01-01T00:00:00Z"
 
     while has_next_page do
-      body = { query: query, variables: { cursor: cursor, app_id: provider_id } }
+      body = { query: query, variables: { cursor: cursor, app_id: provider_id, since: since } }
 
       # Make the POST request
       response = HTTParty.post(endpoint, headers: headers, body: body.to_json)
@@ -144,6 +169,6 @@ class ShopifyApp < ApplicationRecord
       end
     end
 
-    PopulateActivatedOnColumnJob.perform_later(app_id: id)
+    PopulateActivatedOnColumnJob.perform_later(app_id: id, since: since)
   end
 end

@@ -85,6 +85,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    chartkick (5.0.2)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crass (1.0.6)
@@ -99,9 +100,16 @@ GEM
       responders
       warden (~> 1.2.3)
     erubi (1.12.0)
+    et-orbi (1.2.7)
+      tzinfo
+    fugit (1.8.1)
+      et-orbi (~> 1, >= 1.2.7)
+      raabro (~> 1.4)
     globalid (1.1.0)
       activesupport (>= 5.0)
     graphql (2.0.24)
+    groupdate (6.3.0)
+      activesupport (>= 6.1)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -150,6 +158,7 @@ GEM
     public_suffix (5.0.1)
     puma (5.6.6)
       nio4r (~> 2.0)
+    raabro (1.4.0)
     racc (1.7.1)
     rack (2.2.7)
     rack-test (2.1.0)
@@ -203,6 +212,10 @@ GEM
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
       redis-client (>= 0.14.0)
+    sidekiq-cron (1.10.1)
+      fugit (~> 1.8)
+      globalid (>= 1.0.1)
+      sidekiq (>= 6)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -246,9 +259,11 @@ DEPENDENCIES
   annotate
   bootsnap
   capybara
+  chartkick
   debug
   devise (~> 4.9)
   graphql
+  groupdate
   httparty
   importmap-rails
   jbuilder
@@ -260,6 +275,7 @@ DEPENDENCIES
   redis (~> 4.0)
   selenium-webdriver
   sidekiq (~> 7.1)
+  sidekiq-cron
   sprockets-rails
   stimulus-rails
   turbo-rails

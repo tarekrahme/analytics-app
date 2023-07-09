@@ -1,0 +1,43 @@
+<div class="container-xl">
+  <div class="">
+    <h1>Timeline</h1>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Month</th>
+        <th scope="col">
+          <span style="font-size:10px; color: orange">
+            (At month start)
+          </span>
+          <br>
+        Customers 
+        </th>
+        <th scope="col">New Customers</th>
+        <th scope="col">New MRR</th>
+        <th scope="col">Churned Customers</th>
+        <th scope="col">Churned MRR</th>
+        <th scope="col">Net MRR change</th>
+        <th scope="col">Earnings</th>
+        <th scope="col">ARPU</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @data.each do |key, customers_data| %>
+        <tr>
+          <th scope="row"><%= customers_data[:date] %></th>
+          <td><%= customers_data[:active_at_beginning_of_month] %></td>
+          <td style="color: green"><%= link_to customers_data[:new], shops_path(shop_ids: customers_data[:new_customers_ids]), style: "color: green" %></td>
+          <td style="color: green">$<%= number_with_delimiter(customers_data[:new_mrr]) %></td>
+          <td style="color: firebrick"><%= link_to customers_data[:churned], shops_path(shop_ids: customers_data[:churned_customers_ids]), style: "color: firebrick" %></td>
+          <td style="color: firebrick">$<%= number_with_delimiter(customers_data[:churned_mrr]) %></td>
+          <td style=<%= customers_data[:net_mrr_change].negative? ? "color:firebrick" : "color:green" %> >$<%= customers_data[:net_mrr_change] %></td>
+          <td>$<%= number_with_delimiter(customers_data[:actual_mrr]) %></td>
+          <td>$<%= number_with_delimiter(customers_data[:arpu]) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+</table>
+
+p.s. Churned MRR hits the following month
+</div>

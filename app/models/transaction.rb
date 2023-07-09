@@ -20,12 +20,14 @@ class Transaction < ApplicationRecord
   belongs_to :shop
 
   scope :payments, -> { where.not(transaction_type: "APP_SALE_ADJUSTMENT") }
-
+  scope :monthly, -> { where.not(interval: "ANNUAL") }
   after_save :calculate_shop_earnings_and_payments
 
   def calculate_shop_earnings_and_payments
     shop.update(total_earnings: shop.calculate_total_earnings,
                 total_number_of_payments: shop.calculate_total_number_of_payments,
                 average_payment: shop.calculate_average_payment)
+
+    shop.update(monthly_subscription: net_amount, gross_monthly_subscription: gross_amount) if transaction_type == "APP_SUBSCRIPTION_SALE"
   end
 end
