@@ -5,14 +5,20 @@ class TransactionsController < ApplicationController
     @transactions = user.transactions
 
     if params[:days].present?
-      @days = params[:days] == "this_month" ? (Date.today - Date.today.at_beginning_of_month) : params[:days].to_i
+      if params[:days] == "this_month"
+        @days = Date.today - Date.today.at_beginning_of_month + 1
+        transactions_since_beginning_of_period = @transactions.where("provider_created_at >= ?", Date.today.at_beginning_of_month)
+      else
+        @days = params[:days].to_i
+        transactions_since_beginning_of_period = @transactions.where("provider_created_at >= ?", @days.days.ago)
+      end
     else
       @days = 30
+      transactions_since_beginning_of_period = @transactions.where("provider_created_at >= ?", @days.days.ago)
     end
 
     shops = user.shops
-    
-    transactions_since_beginning_of_period = @transactions.where("provider_created_at >= ?", @days.days.ago)
+
     @total_earnings = transactions_since_beginning_of_period.sum(:net_amount)
     @number_of_transactions = transactions_since_beginning_of_period.count
     @previous_total_earnings = @transactions.where("provider_created_at >= ?", (@days + @days).days.ago).where("provider_created_at < ?", @days.days.ago).sum(:net_amount)

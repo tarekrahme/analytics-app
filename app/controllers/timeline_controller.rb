@@ -33,7 +33,7 @@ class TimelineController < ApplicationController
         "churned": churned_customers_count,
         "churned_customers_ids": churned_customers_ids,
         "churned_mrr": churned_mrr,
-        "net_mrr_change": new_mrr - churned_mrr,
+        # "net_mrr_change": new_mrr - churned_mrr,
         "actual_mrr": actual_mrr,
         "arpu": arpu
       }

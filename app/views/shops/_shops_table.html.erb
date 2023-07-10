@@ -44,10 +44,17 @@
             <span class="badge bg-success">Active</span>
           <% end %>
         </td>
-        <td><%= shop.activated_on.strftime('%B %Y') %></td>
+        <td><%= shop.activated_on.strftime('%B %Y') %>
+          <% if shop.active? && shop.total_earnings == 0 %>
+            <span style="font-size:10px; color: orange">
+              ($<%= shop.plan&.amount  %>/m)
+            </span>
+          <% end %>
+        </td>
         <td>
-        <span class="badge bg-success">$</span>
-        <%= number_with_delimiter(shop.total_earnings) %></td>
+          <span class="badge bg-success">$</span>
+          <%= number_with_delimiter(shop.total_earnings) %>
+        </td>
         <td><%= shop.total_number_of_payments %></td>
         <td>
         <span class="badge bg-success">$</span>

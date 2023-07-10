@@ -17,7 +17,7 @@
         <th scope="col">New MRR</th>
         <th scope="col">Churned Customers</th>
         <th scope="col">Churned MRR</th>
-        <th scope="col">Net MRR change</th>
+        <%# <th scope="col">Net MRR change</th> %>
         <th scope="col">Earnings</th>
         <th scope="col">ARPU</th>
       </tr>
@@ -31,7 +31,11 @@
           <td style="color: green">$<%= number_with_delimiter(customers_data[:new_mrr]) %></td>
           <td style="color: firebrick"><%= link_to customers_data[:churned], shops_path(shop_ids: customers_data[:churned_customers_ids]), style: "color: firebrick" %></td>
           <td style="color: firebrick">$<%= number_with_delimiter(customers_data[:churned_mrr]) %></td>
-          <td style=<%= customers_data[:net_mrr_change].negative? ? "color:firebrick" : "color:green" %> >$<%= customers_data[:net_mrr_change] %></td>
+
+          <%# <td style=<%= customers_data[:net_mrr_change].negative? ? "color:firebrick" : "color:green" %> 
+          <%# >$<%= customers_data[:net_mrr_change] %>
+          <%# </td> %>
+          
           <td>$<%= number_with_delimiter(customers_data[:actual_mrr]) %></td>
           <td>$<%= number_with_delimiter(customers_data[:arpu]) %></td>
         </tr>

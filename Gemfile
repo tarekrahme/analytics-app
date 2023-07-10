@@ -62,6 +62,7 @@ gem "chartkick"
 
 gem "groupdate"
 
+gem "dotenv-rails"
 
 # Use Sass to process CSS
 # gem "sassc-rails"

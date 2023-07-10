@@ -22,11 +22,18 @@
 #  access_token             :string
 #  organisation_provider_id :string
 #
+# Indexes
+#
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable, :trackable
+
+  encrypts :access_token
 
   has_many :shopify_apps, dependent: :destroy
   has_many :shops, -> { order('shops.name ASC') }
@@ -121,25 +128,37 @@ class User < ApplicationRecord
         shop_provider_id = transaction["shop"]["id"]
         shop_name = transaction["shop"]["name"]
         
-        app = ShopifyApp.find_or_create_by(user_id: id, provider_id: app_id) do |app|
-          app.name = app_name
+        begin
+          app = ShopifyApp.find_or_create_by(user_id: id, provider_id: app_id) do |app|
+            app.name = app_name
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
         
-        shop = Shop.find_or_create_by(user_id: id, provider_id: shop_provider_id) do |shop|
-          shop.shopify_app_id = app.id
-          shop.shopify_domain = shop_shopify_domain
-          shop.provider_id = shop_provider_id
-          shop.name = shop_name
+        begin
+          shop = Shop.find_or_create_by(user_id: id, provider_id: shop_provider_id) do |shop|
+            shop.shopify_app_id = app.id
+            shop.shopify_domain = shop_shopify_domain
+            shop.provider_id = shop_provider_id
+            shop.name = shop_name
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
 
-        Transaction.find_or_create_by(shop_id: shop.id, provider_id: transaction_id) do |transaction|
-          transaction.shopify_app_id = app.id
-          transaction.provider_created_at = transaction_created_at
-          transaction.interval = transaction_billing_interval
-          transaction.gross_amount = transaction_gross_amount
-          transaction.net_amount = transaction_net_amount
-          transaction.shopify_fee = transaction_shopify_fee
-          transaction.transaction_type = transaction_type
+        begin
+          Transaction.find_or_create_by(shop_id: shop.id, provider_id: transaction_id) do |transaction|
+            transaction.shopify_app_id = app.id
+            transaction.provider_created_at = transaction_created_at
+            transaction.interval = transaction_billing_interval
+            transaction.gross_amount = transaction_gross_amount
+            transaction.net_amount = transaction_net_amount
+            transaction.shopify_fee = transaction_shopify_fee
+            transaction.transaction_type = transaction_type
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
       end
 
@@ -219,24 +238,36 @@ class User < ApplicationRecord
         shop_provider_id = transaction["shop"]["id"]
         shop_name = transaction["shop"]["name"]
         
-        app = ShopifyApp.find_or_create_by(user_id: id, provider_id: app_id) do |app|
-          app.name = app_name
+        begin
+          app = ShopifyApp.find_or_create_by(user_id: id, provider_id: app_id) do |app|
+            app.name = app_name
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
         
-        shop = Shop.find_or_create_by(user_id: id, provider_id: shop_provider_id) do |shop|
-          shop.shopify_app_id = app.id
-          shop.shopify_domain = shop_shopify_domain
-          shop.provider_id = shop_provider_id
-          shop.name = shop_name
+        begin
+          shop = Shop.find_or_create_by(user_id: id, provider_id: shop_provider_id) do |shop|
+            shop.shopify_app_id = app.id
+            shop.shopify_domain = shop_shopify_domain
+            shop.provider_id = shop_provider_id
+            shop.name = shop_name
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
 
-        Transaction.find_or_create_by(shop_id: shop.id, provider_id: transaction_id) do |transaction|
-          transaction.shopify_app_id = app.id
-          transaction.provider_created_at = transaction_created_at
-          transaction.gross_amount = transaction_gross_amount
-          transaction.net_amount = transaction_net_amount
-          transaction.shopify_fee = transaction_shopify_fee
-          transaction.transaction_type = transaction_type
+        begin
+          Transaction.find_or_create_by(shop_id: shop.id, provider_id: transaction_id) do |transaction|
+            transaction.shopify_app_id = app.id
+            transaction.provider_created_at = transaction_created_at
+            transaction.gross_amount = transaction_gross_amount
+            transaction.net_amount = transaction_net_amount
+            transaction.shopify_fee = transaction_shopify_fee
+            transaction.transaction_type = transaction_type
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
       end
 
@@ -316,24 +347,36 @@ class User < ApplicationRecord
         shop_provider_id = transaction["shop"]["id"]
         shop_name = transaction["shop"]["name"]
         
-        app = ShopifyApp.find_or_create_by(user_id: id, provider_id: app_id) do |app|
-          app.name = app_name
+        begin
+          app = ShopifyApp.find_or_create_by(user_id: id, provider_id: app_id) do |app|
+            app.name = app_name
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
         
-        shop = Shop.find_or_create_by(user_id: id, provider_id: shop_provider_id) do |shop|
-          shop.shopify_app_id = app.id
-          shop.shopify_domain = shop_shopify_domain
-          shop.provider_id = shop_provider_id
-          shop.name = shop_name
+        begin
+          shop = Shop.find_or_create_by(user_id: id, provider_id: shop_provider_id) do |shop|
+            shop.shopify_app_id = app.id
+            shop.shopify_domain = shop_shopify_domain
+            shop.provider_id = shop_provider_id
+            shop.name = shop_name
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
 
-        Transaction.find_or_create_by(shop_id: shop.id, provider_id: transaction_id) do |transaction|
-          transaction.shopify_app_id = app.id
-          transaction.provider_created_at = transaction_created_at
-          transaction.gross_amount = transaction_gross_amount
-          transaction.net_amount = transaction_net_amount
-          transaction.shopify_fee = transaction_shopify_fee
-          transaction.transaction_type = transaction_type
+        begin
+          Transaction.find_or_create_by(shop_id: shop.id, provider_id: transaction_id) do |transaction|
+            transaction.shopify_app_id = app.id
+            transaction.provider_created_at = transaction_created_at
+            transaction.gross_amount = transaction_gross_amount
+            transaction.net_amount = transaction_net_amount
+            transaction.shopify_fee = transaction_shopify_fee
+            transaction.transaction_type = transaction_type
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
       end
 
@@ -413,24 +456,36 @@ class User < ApplicationRecord
         shop_provider_id = transaction["shop"]["id"]
         shop_name = transaction["shop"]["name"]
         
-        app = ShopifyApp.find_or_create_by(user_id: id, provider_id: app_id) do |app|
-          app.name = app_name
-        end
-        
-        shop = Shop.find_or_create_by(user_id: id, provider_id: shop_provider_id) do |shop|
-          shop.shopify_app_id = app.id
-          shop.shopify_domain = shop_shopify_domain
-          shop.provider_id = shop_provider_id
-          shop.name = shop_name
+        begin
+          app = ShopifyApp.find_or_create_by(user_id: id, provider_id: app_id) do |app|
+            app.name = app_name
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
 
-        Transaction.find_or_create_by(shop_id: shop.id, provider_id: transaction_id) do |transaction|
-          transaction.shopify_app_id = app.id
-          transaction.provider_created_at = transaction_created_at
-          transaction.gross_amount = transaction_gross_amount
-          transaction.net_amount = transaction_net_amount
-          transaction.shopify_fee = transaction_shopify_fee
-          transaction.transaction_type = transaction_type
+        begin
+          shop = Shop.find_or_create_by(user_id: id, provider_id: shop_provider_id) do |shop|
+            shop.shopify_app_id = app.id
+            shop.shopify_domain = shop_shopify_domain
+            shop.provider_id = shop_provider_id
+            shop.name = shop_name
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
+        end
+
+        begin
+          Transaction.find_or_create_by(shop_id: shop.id, provider_id: transaction_id) do |transaction|
+            transaction.shopify_app_id = app.id
+            transaction.provider_created_at = transaction_created_at
+            transaction.gross_amount = transaction_gross_amount
+            transaction.net_amount = transaction_net_amount
+            transaction.shopify_fee = transaction_shopify_fee
+            transaction.transaction_type = transaction_type
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
       end
 
@@ -439,8 +494,13 @@ class User < ApplicationRecord
       sleep 0.3
     end
 
-    shopify_apps.each do |app|
-      RetreiveEventsAndPlansJob.perform_later(app_id: app.id, since: since)
+    number_of_apps = shopify_apps.count
+    number_of_apps.times do |i|
+      app = shopify_apps[i]
+      next unless app
+
+      time_to_wait = 10.minutes * i
+      RetreiveEventsAndPlansJob.set(wait: time_to_wait.minutes).perform_later(app_id: app.id, since: since)
     end
   end
 end

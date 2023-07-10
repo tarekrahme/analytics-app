@@ -19,5 +19,8 @@ module AnalyticsApp
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.active_record.encryption.key_derivation_salt = ENV['KEY_DERIVATION_SALT']
+    config.active_record.encryption.deterministic_key = ENV['DETERMINISTIC_KEY']
+    config.active_record.encryption.primary_key = ENV['PRIMARY_KEY']
   end
 end

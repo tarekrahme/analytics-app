@@ -1,7 +1,29 @@
 <div class="container-xl">
-  <%= link_to 'trigger', trigger_user_path(@user) %>
+  <%# <%= link_to 'trigger', trigger_user_path(@user) %>
 
-  <% if @access_token.present? && @organisation_provider_id.present? %>
+  <% if @plan != 1 %>
+    <%= link_to 'https://buy.stripe.com/14kcO74EE6rdabu8wx' do %>
+      <button type="button" class="btn btn-outline-primary">
+        Subscribe
+      </button>
+    <% end %>
+    <br>
+    <br>
+    <p>-> Unlimited apps</p>
+    <p>-> Data since 2010</p>
+    <p>-> Cohort analysis</p>
+    <p>-> New MRR per month</p>
+    <p>-> Churn data per month</p>
+    <p>-> Churn MRR per month</p>
+    <p>-> Churned customers (earnings, subscription and churn date...)</p>
+    <p>-> Shops data fully encrypted</p>
+    <p>-> For each customer and ex-customer: Total earnings, subscription date and their current state (active/churned)</p>
+    <%= link_to 'https://buy.stripe.com/14kcO74EE6rdabu8wx' do %>
+      <button type="button" class="btn btn-outline-primary">
+        Subscribe
+      </button>
+    <% end %>
+  <% elsif @access_token.present? && @organisation_provider_id.present? %>
     <br>
     <br>
     Apps: <%= @apps.pluck(:name).to_s %>

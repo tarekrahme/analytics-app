@@ -12,6 +12,12 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
+# Indexes
+#
+#  index_events_on_app_and_shop_and_event_type_and_occured_at  (shopify_app_id,shop_id,event_type,occured_at) UNIQUE
+#  index_events_on_shop_id                                     (shop_id)
+#  index_events_on_shopify_app_id                              (shopify_app_id)
+#
 class Event < ApplicationRecord
   belongs_to :shopify_app
   belongs_to :shop

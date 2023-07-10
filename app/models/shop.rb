@@ -2,24 +2,38 @@
 #
 # Table name: shops
 #
-#  id                       :bigint           not null, primary key
-#  shopify_app_id           :bigint           not null
-#  user_id                  :bigint           not null
-#  shopify_domain           :string
-#  provider_id              :string
-#  name                     :string
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
-#  activated_on             :datetime
-#  total_earnings           :decimal(10, 2)   default(0.0)
-#  total_number_of_payments :integer          default(0)
-#  average_payment          :decimal(10, 2)   default(0.0)
-#  churned_on               :datetime
-#  monthly_subscription     :decimal(10, 2)
+#  id                         :bigint           not null, primary key
+#  shopify_app_id             :bigint           not null
+#  user_id                    :bigint           not null
+#  shopify_domain             :string
+#  provider_id                :string
+#  name                       :string
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  activated_on               :datetime
+#  total_earnings             :decimal(10, 2)   default(0.0)
+#  total_number_of_payments   :integer          default(0)
+#  average_payment            :decimal(10, 2)   default(0.0)
+#  churned_on                 :datetime
+#  monthly_subscription       :decimal(10, 2)
+#  gross_monthly_subscription :decimal(10, 2)
+#  plan_id                    :bigint
+#
+# Indexes
+#
+#  index_shops_on_plan_id                  (plan_id)
+#  index_shops_on_shopify_app_id           (shopify_app_id)
+#  index_shops_on_user_id                  (user_id)
+#  index_shops_on_user_id_and_provider_id  (user_id,provider_id) UNIQUE
 #
 class Shop < ApplicationRecord
+  encrypts :shopify_domain, deterministic: true
+  encrypts :name, deterministic: true
+  encrypts :provider_id, deterministic: true
+
   belongs_to :shopify_app
   belongs_to :user
+  belongs_to :plan, optional: true
 
   has_many :transactions, -> { order('provider_created_at ASC') }, dependent: :destroy
   has_many :events, -> { order('events.occured_at ASC') }, dependent: :destroy
@@ -37,6 +51,10 @@ class Shop < ApplicationRecord
 
   def display_name
     name.size > 24 ? name.first(20) + '...' : name
+  end
+
+  def active?
+    churned_on.nil?
   end
 
   def calculate_total_earnings

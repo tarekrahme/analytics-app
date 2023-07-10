@@ -9,6 +9,12 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
+# Indexes
+#
+#  index_shopify_apps_on_provider_id              (provider_id) UNIQUE
+#  index_shopify_apps_on_user_id                  (user_id)
+#  index_shopify_apps_on_user_id_and_provider_id  (user_id,provider_id) UNIQUE
+#
 class ShopifyApp < ApplicationRecord
   belongs_to :user
 
@@ -27,7 +33,7 @@ class ShopifyApp < ApplicationRecord
     query = <<-GRAPHQL
       query($app_id: ID!, $cursor: String, $since: DateTime){
         app(id: $app_id) {
-          events(after: $cursor, first: 50, types:[SUBSCRIPTION_CHARGE_ACTIVATED, SUBSCRIPTION_CHARGE_CANCELED, SUBSCRIPTION_CHARGE_FROZEN, SUBSCRIPTION_CHARGE_UNFROZEN], occurredAtMin: $since) {
+          events(after: $cursor, first: 80, types:[SUBSCRIPTION_CHARGE_ACTIVATED, SUBSCRIPTION_CHARGE_CANCELED, SUBSCRIPTION_CHARGE_FROZEN, SUBSCRIPTION_CHARGE_UNFROZEN], occurredAtMin: $since) {
             edges {
               cursor
               node {
@@ -107,7 +113,7 @@ class ShopifyApp < ApplicationRecord
 
     cursor = nil
     has_next_page = true
-    since = since.present? ? since : "2016-01-01T00:00:00Z"
+    since = since.present? ? since : "2012-01-01T00:00:00Z"
 
     while has_next_page do
       body = { query: query, variables: { cursor: cursor, app_id: provider_id, since: since } }
@@ -118,7 +124,7 @@ class ShopifyApp < ApplicationRecord
       # Parse the JSON response
       result = JSON.parse(response.body)
 
-      return unless result["data"]
+      break unless result["data"]
       events = result["data"]["app"]["events"]["edges"]
 
       events.each do |event_edge|
@@ -137,13 +143,6 @@ class ShopifyApp < ApplicationRecord
         event_billing_on = event["charge"]["billingOn"]
         gross_amount = event["charge"]["amount"]["amount"]
 
-        shop = Shop.find_or_create_by(user_id: user_id, provider_id: shop_provider_id) do |shop|
-          shop.shopify_app_id = id
-          shop.shopify_domain = shop_shopify_domain
-          shop.provider_id = shop_provider_id
-          shop.name = shop_name
-        end
-
         begin
           plan = Plan.find_or_create_by(shopify_app_id: id, amount: gross_amount) do |plan|
             plan.name = plan_name
@@ -152,7 +151,19 @@ class ShopifyApp < ApplicationRecord
           retry
         end
 
+        begin
+          shop = Shop.find_or_create_by(user_id: user_id, provider_id: shop_provider_id) do |shop|
+            shop.shopify_app_id = id
+            shop.shopify_domain = shop_shopify_domain
+            shop.provider_id = shop_provider_id
+            shop.name = shop_name
+          end
+        rescue ActiveRecord::RecordNotUnique
+          retry
+        end
+
         next unless shop
+        shop.update(plan_id: plan.id) if plan
 
         begin
           Event.find_or_create_by(shopify_app_id: id, shop_id: shop.id, event_type: event_type, occured_at: event_occurred_at) do |event|

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_08_154753) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_10_141502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_08_154753) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["provider_id"], name: "index_shopify_apps_on_provider_id", unique: true
+    t.index ["user_id", "provider_id"], name: "index_shopify_apps_on_user_id_and_provider_id", unique: true
     t.index ["user_id"], name: "index_shopify_apps_on_user_id"
   end
 
@@ -62,7 +64,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_08_154753) do
     t.datetime "churned_on"
     t.decimal "monthly_subscription", precision: 10, scale: 2
     t.decimal "gross_monthly_subscription", precision: 10, scale: 2
+    t.bigint "plan_id"
+    t.index ["plan_id"], name: "index_shops_on_plan_id"
     t.index ["shopify_app_id"], name: "index_shops_on_shopify_app_id"
+    t.index ["user_id", "provider_id"], name: "index_shops_on_user_id_and_provider_id", unique: true
     t.index ["user_id"], name: "index_shops_on_user_id"
   end
 
@@ -78,6 +83,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_08_154753) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "transaction_type"
+    t.index ["provider_id"], name: "index_transactions_on_provider_id", unique: true
+    t.index ["shop_id", "provider_id"], name: "index_transactions_on_shop_id_and_provider_id", unique: true
     t.index ["shop_id"], name: "index_transactions_on_shop_id"
     t.index ["shopify_app_id"], name: "index_transactions_on_shopify_app_id"
   end
@@ -101,6 +108,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_08_154753) do
     t.datetime "updated_at", null: false
     t.string "access_token"
     t.string "organisation_provider_id"
+    t.integer "plan"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -109,6 +117,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_08_154753) do
   add_foreign_key "events", "shops"
   add_foreign_key "plans", "shopify_apps"
   add_foreign_key "shopify_apps", "users"
+  add_foreign_key "shops", "plans"
   add_foreign_key "shops", "shopify_apps"
   add_foreign_key "shops", "users"
   add_foreign_key "transactions", "shopify_apps"

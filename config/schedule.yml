@@ -1,0 +1,5 @@
+# daily_retrieve_data_job every day at 12:00 am
+daily_retreive_data_job:
+  cron: "0 0 * * *"
+  class: "DailyRetreiveDataJob"
+  queue: "default"

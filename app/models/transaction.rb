@@ -15,6 +15,13 @@
 #  updated_at          :datetime         not null
 #  transaction_type    :string
 #
+# Indexes
+#
+#  index_transactions_on_provider_id              (provider_id) UNIQUE
+#  index_transactions_on_shop_id                  (shop_id)
+#  index_transactions_on_shop_id_and_provider_id  (shop_id,provider_id) UNIQUE
+#  index_transactions_on_shopify_app_id           (shopify_app_id)
+#
 class Transaction < ApplicationRecord
   belongs_to :shopify_app
   belongs_to :shop
