@@ -19,6 +19,16 @@ services:
           property: connectionString
       - key: RAILS_MASTER_KEY
         sync: false
+      - key: PRIMARY_KEY
+        sync: false
+      - key: DETERMINISTIC_KEY
+        sync: false
+      - key: KEY_DERIVATION_SALT
+        sync: false
+      - key: SIDEKIQ_USERNAME
+        sync: false
+      - key: SIDEKIQ_PASSWORD
+        sync: false            
   - type: web
     name: rails-web
     runtime: ruby
@@ -33,3 +43,13 @@ services:
           property: connectionString
       - key: RAILS_MASTER_KEY
         sync: false
+      - key: PRIMARY_KEY
+        sync: false
+      - key: DETERMINISTIC_KEY
+        sync: false
+      - key: KEY_DERIVATION_SALT
+        sync: false
+      - key: SIDEKIQ_USERNAME
+        sync: false
+      - key: SIDEKIQ_PASSWORD
+        sync: false        
