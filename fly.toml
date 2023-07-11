@@ -8,7 +8,7 @@ primary_region = "ewr"
 console_command = "/rails/bin/rails console"
 
 [deploy]
-  release_command = "./bin/rails db:prepare && ./bin/rails db:migrate"
+  release_command = "./bin/rails db:prepare"
 
 [processes]
   app = "./bin/rails server"
