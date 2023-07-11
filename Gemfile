@@ -44,7 +44,7 @@ gem "bootsnap", require: false
 
 gem "devise", "~> 4.9"
 
-gem "sidekiq", "~> 7.1"
+gem "sidekiq", "< 7.0"
 
 gem "sidekiq-cron"
 
