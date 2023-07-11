@@ -99,6 +99,8 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dockerfile-rails (1.5.1)
+      rails
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
@@ -269,6 +271,7 @@ DEPENDENCIES
   chartkick
   debug
   devise (~> 4.9)
+  dockerfile-rails (>= 1.5)
   dotenv-rails
   graphql
   groupdate
