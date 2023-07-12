@@ -26,7 +26,7 @@ class StripeController < ApplicationController
 
     # Handle the event
     case event.type
-    when 'payment_intent.succeeded'
+    when 'payment_intent.succeeded', 'checkout.session.completed'
       pp event.data.object
       
       # get email of customer
