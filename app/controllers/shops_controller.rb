@@ -19,7 +19,7 @@ class ShopsController < ApplicationController
 
     if params[:search].present?
       @shops = current_user.shops
-      @shops = @shops.where("name ILIKE ?", "%#{params[:search]}%")
+      @shops = @shops.where(name: params[:search])
     end
 
     if params[:sort_earnings] == 'asc'
