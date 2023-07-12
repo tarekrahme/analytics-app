@@ -33,4 +33,6 @@ Rails.application.routes.draw do
   get '/transactions/main_chart', to: 'transactions#main_chart'
 
   get 'timeline', to: 'timeline#index'
+
+  post '/stripe/webhook', to: 'stripe#webhook'
 end

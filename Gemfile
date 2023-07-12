@@ -64,6 +64,8 @@ gem "groupdate"
 
 gem "dotenv-rails"
 
+gem "stripe"
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
