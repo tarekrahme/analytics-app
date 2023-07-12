@@ -16,11 +16,11 @@ class StripeController < ApplicationController
         )
     rescue JSON::ParserError => e
         # Invalid payload
-        status 400
+        return 400
         return
     rescue Stripe::SignatureVerificationError => e
         # Invalid signature
-        status 400
+        return 400
         return
     end
 
