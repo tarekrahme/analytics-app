@@ -2,6 +2,10 @@ class TimelineController < ApplicationController
   def index
     @data = {}
 
+    if current_user.plan != 1
+      flash[:notice] = "Subscribe #{view_context.link_to('here', '/')} to see your timeline".html_safe
+    end
+
     shops = current_user.shops
     current_date = Date.today
 

@@ -2,6 +2,10 @@ class ShopsController < ApplicationController
   def index
     @shops = current_user.shops.once_customer
 
+    if current_user.plan != 1
+      flash[:notice] = "Subscribe #{view_context.link_to('here', '/')} to see your customers".html_safe
+    end
+
     if params[:month]
       @shops = current_user.shops
       @shops = @shops.where("DATE_TRUNC('month', activated_on) = ?", params[:month])

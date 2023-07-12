@@ -2,6 +2,10 @@ class TransactionsController < ApplicationController
   def index
     user = current_user
 
+    if user.plan != 1
+      flash[:notice] = "Subscribe #{view_context.link_to('here', '/')} to see your earnings".html_safe
+    end
+
     @transactions = user.transactions
 
     if params[:days].present?
