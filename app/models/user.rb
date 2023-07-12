@@ -96,7 +96,7 @@ class User < ApplicationRecord
 
     cursor = nil
     has_next_page = true
-    since = since.present? ? since : "2016-01-01T00:00:00Z"
+    since = since.present? ? since : "2010-01-01T00:00:00Z"
 
     while has_next_page do
       body = { query: query, variables: { cursor: cursor, since: since } }

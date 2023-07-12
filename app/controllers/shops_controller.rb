@@ -88,7 +88,7 @@ class ShopsController < ApplicationController
     start_from = 12.months.ago.beginning_of_month
 
     month = start_from
-    12.times do |i|
+    (12+1).times do |i|
       cohort_month = month
       @data[month] = []
       cohort_shops = shops.where("activated_on >= ? AND activated_on < ?", month, month + 1.month)
