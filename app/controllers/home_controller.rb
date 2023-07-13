@@ -10,9 +10,5 @@ class HomeController < ApplicationController
     @transactions = @user.transactions
     @plans = @user.plans
     @events = @user.events
-
-    if @plan == 1
-      redirect_to transactions_path
-    end
   end
 end
