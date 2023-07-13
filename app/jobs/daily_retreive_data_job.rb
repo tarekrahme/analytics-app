@@ -5,7 +5,7 @@ class DailyRetreiveDataJob < ApplicationJob
     if user_id
       users = [User.find(user_id)]
     else
-      users = User.all
+      users = User.where(plan: 1)
     end
 
     users.each do |user|
