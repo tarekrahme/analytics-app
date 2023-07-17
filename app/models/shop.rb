@@ -66,7 +66,10 @@ class Shop < ApplicationRecord
   end
 
   def calculate_average_payment
-    (calculate_total_earnings / calculate_total_number_of_payments).round(2)
+    payments_count = calculate_total_number_of_payments
+    return 0 if payments_count.zero?
+
+    (calculate_total_earnings / payments_count).round(2)
   end
 
   def determine_status
