@@ -76,6 +76,8 @@ class Shop < ApplicationRecord
     # check if the shop has activated a subscription
     if events.activated.any?
       update(activated_on: events.activated.first.occured_at)
+    else
+      return
     end
 
     # check if the shop has cancelled a subscription
