@@ -9,7 +9,7 @@ class TimelineController < ApplicationController
     shops = current_user.shops
     current_date = Date.today
 
-    24.times do |i|
+    36.times do |i|
       date = (current_date - i.months).strftime("%B %Y")
       customers_beginning_of_month = shops.customer_on_date((current_date - i.months).beginning_of_month).count
       
