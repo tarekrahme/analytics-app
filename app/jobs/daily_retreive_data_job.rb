@@ -9,7 +9,7 @@ class DailyRetreiveDataJob < ApplicationJob
     end
 
     users.each do |user|
-      user.retreive_data(since: 2.days.ago.strftime("%Y-%m-%dT%H:%M:%S%z"))
+      user.retreive_data(since: 3.months.ago.strftime("%Y-%m-%dT%H:%M:%S%z"))
     end
   end
 end
