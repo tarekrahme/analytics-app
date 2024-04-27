@@ -86,7 +86,7 @@ class User < ApplicationRecord
     GRAPHQL
 
     # Set the endpoint URL and access token
-    endpoint = "https://partners.shopify.com/#{organisation_provider_id}/api/2023-04/graphql.json"
+    endpoint = "https://partners.shopify.com/#{organisation_provider_id}/api/2023-10/graphql.json"
 
     # Prepare the headers and request body
     headers = {
